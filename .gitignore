@@ -8,3 +8,8 @@ node_modules/
 
 # dotenv environment variable files
 .env
+
+# Build-generated
+build/static
+build/asset-manifest.json
+build/index.html
