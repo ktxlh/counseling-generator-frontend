@@ -21,7 +21,7 @@ const ChatRoom = (props) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [suggestionMessage, setSuggestionMessage] = useState("");
-  const [suggestions, setSuggestions] = useState(["Grounding"]);
+  const [suggestions, setSuggestions] = useState([]);
   const [suggestion, setSuggestion] = useState("");
   const [predictions, setPredictions] = useState([]);
   const [showDialog, setShowDialog] = React.useState(false);
