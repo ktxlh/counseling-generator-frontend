@@ -87,7 +87,7 @@ section.chat__body {
     height: 8vh;
 }
 .chat__strategies-container {
-    width: 70%;
+    width: 90%;
     margin: 0.7rem auto;
 }
 .chat__strategies-group {
@@ -104,6 +104,11 @@ section.chat__body {
     font-size: .8rem;
     color: #fff;
     border-radius: .4rem;
+    width: 32%;
+}
+.chat__strategies-button:hover {
+    /* Darken color when hover */
+    background-color: #1664b3;
 }
 /* CHAT SUGGESTIONS */
 .chat__suggestion {
@@ -111,7 +116,7 @@ section.chat__body {
     height: 8vh;
 }
 .chat__suggestion-container {
-    width: 70%;
+    width: 90%;
     margin: 0.7rem auto;
 }
 .chat__suggestion-group {
@@ -127,24 +132,31 @@ section.chat__body {
     background-color: #fff;
     font-size: .8rem;
     border-radius: .4rem;
+    width: 32%;
+}
+.chat__suggestion-button:hover {
+    /* Darken color when hover */
+    background-color: #E5E5E5;
 }
 /* Chat Input */
 .chat__input {
-    height: 5vh;
+    height: 8vh;
     border-bottom: 1px solid #E5E5E5;
 }
 .chat__input-wrapper {
     height: 100%;
 }
 .chat__input-wrapper form {
+    padding: 1rem 1rem;
     width: 98%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     height: 100%;
 }
 .chat__input-wrapper input {
-    width: 100%;
+    padding: 0rem 0.5rem;
+    width: 95%;
     height: 100%;
     border: none;
     display: inline-block;
@@ -153,6 +165,7 @@ section.chat__body {
     height: 100%;
     border: none;
     background-color: #fff;
+    cursor: pointer;
 }
 .chat__input-wrapper button img {
     width: 25px;
