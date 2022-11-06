@@ -1,12 +1,20 @@
+input:focus {
+    outline: none;
+}
+
 .chat {
-    min-width: 94vh;
-    height: 94vh;
+    min-width: 93vh;
+    height: 93vh;
     background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .chat__header {
+    padding: .1rem .4rem;
     border-bottom: 1px solid #E5E5E5;
-    height: 7vh;
+    height: auto;
 }
 
 .chat__header-container {
@@ -49,9 +57,13 @@
 /* CHAT BODY */
 section.chat__body {
     height: 64vh;
-    max-height: 64vh;
     overflow-y: scroll;
     border-bottom: 1px solid #E5E5E5;
+}
+section.chat__body-empty {
+    height: 79vh;
+    overflow-y: scroll;
+    border-bottom: none;
 }
 
 .chat__body-container {
@@ -69,7 +81,7 @@ section.chat__body {
     width: fit-content;
     border-radius: .8rem;
     font-size: .8rem;
-    max-width: 50%;
+    max-width: 75%;
 }
 
 .chat__message-item.my-message {
@@ -83,8 +95,8 @@ section.chat__body {
 }
 /* CHAT STRATEGIES */
 .chat__strategies {
-    border-bottom: 1px solid #E5E5E5;
-    height: 8vh;
+    /* border-bottom: 1px solid #E5E5E5; */
+    height: auto;
 }
 .chat__strategies-container {
     width: 90%;
@@ -95,36 +107,101 @@ section.chat__body {
     justify-content: space-between;
     align-items: center;
 }
-.chat__strategies-button {
+.chat__strategies-button-1 {
     display: block;
-    padding: 0.7rem 1rem;
-    border: 1px solid #1F8FFD;
-    cursor: pointer;
-    background-color: #1F8FFD;
+    height: 2rem;
+    border: none;
+    background-color: #fff;
     font-size: .8rem;
-    color: #fff;
+    color: #1F8FFD;
+    border-radius: .4rem;
+    width: 99%;
+    align-items: center;
+}
+.chat__strategies-button-2 {
+    display: block;
+    height: 2rem;
+    border: none;
+    background-color: #fff;
+    font-size: .8rem;
+    color: #1F8FFD;
+    border-radius: .4rem;
+    width: 49%;
+    align-items: center;
+}
+.chat__strategies-button-3 {
+    display: block;
+    height: 2rem;
+    border: none;
+    background-color: #fff;
+    font-size: .8rem;
+    color: #1F8FFD;
     border-radius: .4rem;
     width: 32%;
+    align-items: center;
 }
-.chat__strategies-button:hover {
-    /* Darken color when hover */
-    background-color: #1664b3;
+.chat__strategies-code {
+    display: block;
+    font-weight: bold;
+}
+.chat__strategies-description {
+    display: none;
+    font-weight: normal;
+}
+.chat__strategies-button-1:hover .chat__strategies-code {
+    display: none;
+}
+.chat__strategies-button-1:hover .chat__strategies-description {
+    display: block;
+}
+.chat__strategies-button-2:hover .chat__strategies-code {
+    display: none;
+}
+.chat__strategies-button-2:hover .chat__strategies-description {
+    display: block;
+}
+.chat__strategies-button-3:hover .chat__strategies-code {
+    display: none;
+}
+.chat__strategies-button-3:hover .chat__strategies-description {
+    display: block;
 }
 /* CHAT SUGGESTIONS */
 .chat__suggestion {
     border-bottom: 1px solid #E5E5E5;
-    height: 8vh;
+    height: 6vh auto;
 }
 .chat__suggestion-container {
     width: 90%;
     margin: 0.7rem auto;
+    vertical-align: top;
 }
 .chat__suggestion-group {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.chat__suggestion-button {
+.chat__suggestion-button-1 {
+    display: block;
+    padding: 0.7rem 1rem;
+    border: 1px solid #E5E5E5;
+    cursor: pointer;
+    background-color: #fff;
+    font-size: .8rem;
+    border-radius: .4rem;
+    width: 99%;
+}
+.chat__suggestion-button-2 {
+    display: block;
+    padding: 0.7rem 1rem;
+    border: 1px solid #E5E5E5;
+    cursor: pointer;
+    background-color: #fff;
+    font-size: .8rem;
+    border-radius: .4rem;
+    width: 49%;
+}
+.chat__suggestion-button-3 {
     display: block;
     padding: 0.7rem 1rem;
     border: 1px solid #E5E5E5;
@@ -134,13 +211,19 @@ section.chat__body {
     border-radius: .4rem;
     width: 32%;
 }
-.chat__suggestion-button:hover {
-    /* Darken color when hover */
-    background-color: #E5E5E5;
+/* Darken color when hover */
+.chat__suggestion-button-1:hover {
+    font-weight: bold;
+}
+.chat__suggestion-button-2:hover {
+    font-weight: bold;
+}
+.chat__suggestion-button-3:hover {
+    font-weight: bold;
 }
 /* Chat Input */
 .chat__input {
-    height: 8vh;
+    height: 4.5rem;
     border-bottom: 1px solid #E5E5E5;
 }
 .chat__input-wrapper {
@@ -168,8 +251,8 @@ section.chat__body {
     cursor: pointer;
 }
 .chat__input-wrapper button img {
-    width: 25px;
-    height: 25px;
+    width: 1.8rem;
+    height: 1.8rem;
 }
 
 /* Suggestions Section */

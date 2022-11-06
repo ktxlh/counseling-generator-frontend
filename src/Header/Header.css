@@ -4,13 +4,13 @@
     height: 100vh;
 }
 .home__header {
-    height: 6vh;
+    height: auto;
     background-color: #1F8FFD;
 }
 .home__header-icon {
-    width: 3.1rem;
-    padding: 0.3rem;
-    height: 100%;
+    width: 4rem;
+    padding: .4rem .7rem;
+    height: auto;
 }
 .home__header-icon img {
     width: 100%;

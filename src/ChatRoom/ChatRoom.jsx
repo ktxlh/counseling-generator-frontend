@@ -29,15 +29,16 @@ const ChatRoom = (props) => {
   const close = () => setShowDialog(false);
   const cancelRef = React.useRef();
   const data = {
-    "Grounding": "Use a short, neutral phrase to continue the conversation\n",
-    "Open Question": "Pose a question to seek open ended information from the client\nI understand you have some concerns. Can you tell me about them?",
-    "Closed Question": "Pose a question to seek specific information from the client\n",
-    "Introduction/Greeting" : "Greet or exchange introductions with the client\n",
-    "Affirm" : "Offer positive feedback regarding the client's actions\nThank you for hanging in there with me. I appreciate this is not easy for you to hear.",
-    "Persuade" : "Offer logical points to the client's conversation\n",
-    "Reflection" : "Reflect on something the client has said\n",
-    "Support" : "Be sympathetic towards the client's circumstances\n",
+    "Grounding": "Facilitate or acknowledge.",
+    "Open Question": "Pose a question that leaves a latitude for response.",
+    "Closed Question": "Pose a question that implies a short answer, such as yes/no.",
+    "Introduction/Greeting" : "Greet or exchange introductions with the client.",
+    "Affirm" : "Say something positive or complimentary, possibly as reinforcement.",
+    "Persuade" : "Ask for permission to change client's opinions, attitudes, or behavior.",
+    "Reflection" : "Capture and return to the client something the client has said.",
+    "Support" : "Be sympathetic towards the client's circumstances",
   }
+  const textbox = document.getElementById("chat__input-textbox");
   
   // const suggestions = ["nice message", "click this", "howdy"]
   let socketRef = useRef()
@@ -93,6 +94,7 @@ const ChatRoom = (props) => {
     } else {
       alert("Please add a message.");
     }
+    textbox.focus();
   };
 
   const onSelectPred = x => {
@@ -100,12 +102,13 @@ const ChatRoom = (props) => {
     console.log(predictions.findIndex(i => i === x), "index")
     setMessage(x);
     socketRef.current.emit("log_click", is_listener, predictions.findIndex(i => i === x)); //["itte", "yye"]
+    textbox.focus();
   };
 
   const onSelectSuggestion = x => {
     setSuggestion(x);
     setSuggestionMessage(data[x]);
-    toggleModal();
+    // toggleModal();
   };
 
   const onDumpLogs = () => {
@@ -145,7 +148,7 @@ const ChatRoom = (props) => {
 
           </div>
         </header>
-        <section className="chat__body">
+        <section className={`chat__body${!is_listener || suggestions.length == 0 ? "-empty" : ""}`}>
           <div className="chat__body-container" >
             <ScrollToBottom className="chat__messages-list">
               {messages?.length > 0 &&
@@ -169,15 +172,10 @@ const ChatRoom = (props) => {
         <section className="chat__strategies">
           {show_predictions && is_listener && suggestions.length > 0 && <div className="chat__strategies-container">
             <div className="chat__strategies-group">
-              {suggestions.map(i => (<button onClick={() => onSelectSuggestion(i)} className="chat__strategies-button" key = {i}>{i}</button>))}
-              <Modal
-                  style={{opacity:1}}
-                  isOpen={isOpen}
-                  onRequestClose={toggleModal}
-                  contentLabel="Suggestion Description"
-                >
-                  <div>{suggestion}: {suggestionMessage}</div>
-                </Modal>
+              {suggestions.map(i => (<button className={`chat__strategies-button-${suggestions.length}`} key = {i}>
+                <span className="chat__strategies-code">{i}</span>
+                <span className="chat__strategies-description"><br/>{data[i]}</span>
+                </button>))}
               {/* {showDialog && (
                 // <AlertDialog className = "alert-buttons" leastDestructiveRef={cancelRef}>
 
@@ -201,16 +199,18 @@ const ChatRoom = (props) => {
         <section className="chat__suggestion">
           {show_predictions && is_listener && predictions.length > 0 && <div className="chat__suggestion-container">
             <div className="chat__suggestion-group">
-              {predictions.map(i => (<button onClick={() => onSelectPred(i)} className="chat__suggestion-button" key = {i}>{i}</button>))}
+              {predictions.map(i => (<button onClick={() => onSelectPred(i)} className={`chat__suggestion-button-${predictions.length}`} key = {i}>{i}</button>))}
             </div>
           </div>}
         </section>
         <section className="chat__input">
           <div className="chat__input-wrapper">
             <form onSubmit={onSendMessage}>
-              <input value={message}
+              <input id="chat__input-textbox" 
+                value={message}
                 onChange={onChangeMessage}
-                placeholder="Write message..." />
+                placeholder="Type your message here..."
+                autocomplete="off" />
               <button className="submit__icon">
                 <img src="/send_button.png" alt="send button" />
               </button>
