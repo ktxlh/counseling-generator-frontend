@@ -136,7 +136,7 @@ const ChatRoom = (props) => {
             <div className="chat__header-item">
               <div className="chat__item-group">
                 <div><img src="/user_logo.png" alt="user logo" /></div>
-                <h5>{!is_listener ? "Listener" : "Client"}</h5>
+                {!is_listener ? "Listener" : "Member"}
               </div>
             </div>
             {!is_listener && <div className="chat__header-item">
@@ -172,9 +172,9 @@ const ChatRoom = (props) => {
         <section className="chat__strategies">
           {show_predictions && is_listener && suggestions.length > 0 && <div className="chat__strategies-container">
             <div className="chat__strategies-group">
-              {suggestions.map(i => (<button className={`chat__strategies-button-${suggestions.length}`} key = {i}>
+              {suggestions.map(i => (<button className={`chat__strategies-button f${suggestions.length}`} key = {i}>
                 <span className="chat__strategies-code">{i}</span>
-                <span className="chat__strategies-description"><br/>{data[i]}</span>
+                <span className="chat__strategies-description">{data[i]}</span>
                 </button>))}
               {/* {showDialog && (
                 // <AlertDialog className = "alert-buttons" leastDestructiveRef={cancelRef}>
@@ -199,7 +199,7 @@ const ChatRoom = (props) => {
         <section className="chat__suggestion">
           {show_predictions && is_listener && predictions.length > 0 && <div className="chat__suggestion-container">
             <div className="chat__suggestion-group">
-              {predictions.map(i => (<button onClick={() => onSelectPred(i)} className={`chat__suggestion-button-${predictions.length}`} key = {i}>{i}</button>))}
+              {predictions.map(i => (<button onClick={() => onSelectPred(i)} className={`chat__suggestion-button f${predictions.length}`} key = {i}>{i}</button>))}
             </div>
           </div>}
         </section>
