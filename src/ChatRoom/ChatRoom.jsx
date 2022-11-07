@@ -135,7 +135,7 @@ const ChatRoom = (props) => {
           <div className="chat__header-container">
             <div className="chat__header-item">
               <div className="chat__item-group">
-                <div><img src="/user_logo.png" alt="user logo" /></div>
+              <div className="user-img-chat">{is_listener ? "M" : "L"}</div>
                 {!is_listener ? "Listener" : "Member"}
               </div>
             </div>
@@ -156,14 +156,16 @@ const ChatRoom = (props) => {
                   <li
                     key={i}
                     ref={messageRef}
-                    className={`
-                    chat__message-item 
+                    className="chat__message-item"
+                  > <div className="chat__message-container">
+                    {message.is_listener !== is_listener ? <div className="user-img-chat">{message.is_listener ? "L" : "M"}</div> : <span></span>}
+                    <div className={`
+                    chat__message-message
                     ${
                       message.is_listener === is_listener ? "my-message" : "received-message"
                       }`
-                    }
-                  >
-                    {message.utterance}
+                    }>{message.utterance}</div>
+                  </div>
                   </li>
                 ))}
             </ScrollToBottom>

@@ -7,12 +7,11 @@
     height: auto;
     background-color: #1F8FFD;
 }
-.home__header-icon {
-    width: 4rem;
-    padding: .4rem .7rem;
-    height: auto;
+.home__header-icon-container {
+    padding-left: 1rem;
 }
-.home__header-icon img {
-    width: 100%;
-    height: 100%;
+.home__header-icon {
+    height: 4rem;
+    width: 4rem;
+    /* padding: 0.5rem 1rem 0rem 1.5rem; */
 }
