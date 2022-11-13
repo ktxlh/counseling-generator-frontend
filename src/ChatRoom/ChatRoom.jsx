@@ -158,7 +158,7 @@ const ChatRoom = (props) => {
                     ref={messageRef}
                     className="chat__message-item"
                   > <div className="chat__message-container">
-                    {message.is_listener !== is_listener ? <div className="user-img-chat">{message.is_listener ? "L" : "M"}</div> : <span></span>}
+                    {message.is_listener !== is_listener ? <div className="user-img-chat">{message.is_listener ? i + 1 : "M"}</div> : <span></span>}
                     <div className={`
                     chat__message-message
                     ${
