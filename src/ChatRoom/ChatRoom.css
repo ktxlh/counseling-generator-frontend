@@ -19,8 +19,8 @@ input:focus {
 }
 
 .chat {
-    min-width: 93vh;
-    height: 93vh;
+    min-width: 92vh;
+    height: 92vh;
     background: #fff;
     display: flex;
     flex-direction: column;
