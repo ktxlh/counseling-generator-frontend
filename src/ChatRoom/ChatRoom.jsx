@@ -3,13 +3,7 @@ import ScrollToBottom from 'react-scroll-to-bottom';
 import io from "socket.io-client";
 import "./ChatRoom.css";
 import Modal from "react-modal";
-import {
-  AlertDialog,
-  AlertDialogLabel,
-  AlertDialogDescription,
-  AlertDialogOverlay,
-  AlertDialogContent,
-} from "@reach/alert-dialog";
+import Collapse from 'react-collapse';
 
 Modal.setAppElement("#root");
 
@@ -25,7 +19,8 @@ const ChatRoom = (props) => {
   const [suggestion, setSuggestion] = useState("");
   const [predictions, setPredictions] = useState([]);
   const [showDialog, setShowDialog] = React.useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+  const [toggleText, setToggleText] = useState("↓");
   const close = () => setShowDialog(false);
   const cancelRef = React.useRef();
   const data = {
@@ -39,6 +34,7 @@ const ChatRoom = (props) => {
     "Support" : "Be sympathetic towards the client's circumstances",
   }
   const textbox = document.getElementById("chat__input-textbox");
+  const showButton = document.getElementsByClassName("chat__show-button");
   
   // const suggestions = ["nice message", "click this", "howdy"]
   let socketRef = useRef()
@@ -67,24 +63,9 @@ const ChatRoom = (props) => {
     };
   }, [messages])
 
-  // const handleNewMessageChange = (event) => {
-  //   setNewMessage(event.target.value);
-  // };
-
-  // const handleSendMessage = () => {
-  //   sendMessage(newMessage);
-  //   setNewMessage("");
-  // };
-
   const onChangeMessage = e => {
     setMessage(e.target.value);
   };
-
-  // const open = (text) => {
-  //   setShowDialog(true);
-  //   setSuggestionMessage(data[text]);
-  //   setSuggestion(text);
-  // };
 
   const onSendMessage = (e) => {
     e.preventDefault()
@@ -108,7 +89,6 @@ const ChatRoom = (props) => {
   const onSelectSuggestion = x => {
     setSuggestion(x);
     setSuggestionMessage(data[x]);
-    // toggleModal();
   };
 
   const onDumpLogs = () => {
@@ -119,14 +99,15 @@ const ChatRoom = (props) => {
     socketRef.current.emit("clear_session");
   };
 
-  // useEffect(() => {
-  //   messageRef?.current.scrollIntoView({behavior: "smooth"})
-  // }, [messages])
-
   const toggleModal = () => {
     setIsOpen(!isOpen);
     console.log(true);
-  }
+  };
+
+  const onClickShowButton = () => {
+    setIsOpen(!isOpen);
+    setToggleText(isOpen ? "↑" : "↓");
+  };
 
   return (
     <>
@@ -171,39 +152,28 @@ const ChatRoom = (props) => {
             </ScrollToBottom>
           </div>
         </section>
+        <section>
+          {show_predictions && is_listener && suggestions.length > 0 && <label className="label">
+            <button className="chat__show-button"
+              onClick={onClickShowButton}>{toggleText}</button>
+          </label>}
+        </section>
         <section className="chat__strategies">
-          {show_predictions && is_listener && suggestions.length > 0 && <div className="chat__strategies-container">
+          {show_predictions && is_listener && suggestions.length > 0 && <Collapse isOpened={isOpen}><div className="chat__strategies-container">
             <div className="chat__strategies-group">
               {suggestions.map(i => (<button className={`chat__strategies-button f${suggestions.length}`} key = {i}>
                 <span className="chat__strategies-code">{i}</span>
                 <span className="chat__strategies-description">{data[i]}</span>
                 </button>))}
-              {/* {showDialog && (
-                // <AlertDialog className = "alert-buttons" leastDestructiveRef={cancelRef}>
-
-                //   <AlertDialogLabel className = "alert-dialog">{suggestion}: {suggestionMessage}</AlertDialogLabel>
-                //   <button ref={cancelRef} onClick={close} className="alert_button">
-                //       Click to continue
-                //   </button>
-                // </AlertDialog>
-                <Modal
-                  style={{opacity:1}}
-                  isOpen={true}
-                  onRequestClose={toggleModal}
-                  contentLabel="Suggestion Description"
-                >
-                  <div>{suggestion}: {suggestionMessage}</div>
-                </Modal>
-              )} */}
             </div>
-          </div>}
+          </div></Collapse>}
         </section>
         <section className="chat__suggestion">
-          {show_predictions && is_listener && predictions.length > 0 && <div className="chat__suggestion-container">
+          {show_predictions && is_listener && predictions.length > 0 && <Collapse isOpened={isOpen}><div className="chat__suggestion-container">
             <div className="chat__suggestion-group">
               {predictions.map(i => (<button onClick={() => onSelectPred(i)} className={`chat__suggestion-button f${predictions.length}`} key = {i}>{i}</button>))}
             </div>
-          </div>}
+          </div></Collapse>}
         </section>
         <section className="chat__input">
           <div className="chat__input-wrapper">
@@ -212,7 +182,8 @@ const ChatRoom = (props) => {
                 value={message}
                 onChange={onChangeMessage}
                 placeholder="Type your message here..."
-                autocomplete="off" />
+                autocomplete="off" 
+                autofocus />
               <button className="submit__icon">
                 <img src="/send_button.png" alt="send button" />
               </button>
@@ -221,33 +192,6 @@ const ChatRoom = (props) => {
         </section>
       </div>
     </>
-    // <div className="chat-room-container">
-    //   <h1 className="room-name">Room: {roomId}</h1>
-    //   <h1 className="chat-ID">User ID: {userID}</h1>
-    //   <div className="messages-container">
-    //     <ol className="messages-list">
-    // {messages.map((message, i) => (
-    //   <li
-    //     key={i}
-    //     className={`message-item ${
-    //       message.ownedByCurrentUser ? "my-message" : "received-message"
-    //     }`}
-    //   >
-    //     {message.body}
-    //   </li>
-    // ))}
-    //     </ol>
-    //   </div>
-    //   <textarea
-    // value={newMessage}
-    // onChange={handleNewMessageChange}
-    // placeholder="Write message..."
-    //     className="new-message-input-field"
-    //   />
-    //   <button onClick={handleSendMessage} className="send-message-button">
-    //     Send
-    //   </button>
-    // </div>
   );
 };
 

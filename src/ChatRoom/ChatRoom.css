@@ -214,6 +214,24 @@ section.chat__body-empty {
 .chat__suggestion-button.f3 {
     width: 32%;
 }
+/* Show/hide tool */
+.chat__show-button {
+    height: 1.2rem;
+    width: 100%;
+    display: block;
+    border: none;
+    cursor: pointer;
+    color: #b4b4b4;
+    background-color: #fff;
+    font-size: .8rem;
+    transition: 0.3s;
+}
+.chat__show-button:hover {
+    background-color: rgb(235, 235, 235);
+}
+.collapse-css-transition {
+    transition: height 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
 /* Chat Input */
 .chat__input {
     height: 4.5rem;
@@ -223,7 +241,7 @@ section.chat__body-empty {
     height: 100%;
 }
 .chat__input-wrapper form {
-    padding: 1rem 1rem;
+    padding: 0.5rem 0rem;
     display: flex;
     justify-content: center;
     align-items: center;
