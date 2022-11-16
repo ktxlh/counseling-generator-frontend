@@ -20,7 +20,7 @@ const ChatRoom = (props) => {
   const [predictions, setPredictions] = useState([]);
   const [showDialog, setShowDialog] = React.useState(false);
   const [isOpen, setIsOpen] = useState(true);
-  const [toggleText, setToggleText] = useState("↓");
+  const [toggleText, setToggleText] = useState("↓ Hide example ↓");
   const close = () => setShowDialog(false);
   const cancelRef = React.useRef();
   const data = {
@@ -82,7 +82,7 @@ const ChatRoom = (props) => {
     console.log(x, "messge")
     console.log(predictions.findIndex(i => i === x), "index")
     setMessage(x);
-    socketRef.current.emit("log_click", is_listener, predictions.findIndex(i => i === x)); //["itte", "yye"]
+    socketRef.current.emit("log_click", predictions.findIndex(i => i === x)); //["itte", "yye"]
     textbox.focus();
   };
 
@@ -105,8 +105,9 @@ const ChatRoom = (props) => {
   };
 
   const onClickShowButton = () => {
+    setToggleText(isOpen ? "↑ Show example ↑" : "↓ Hide example ↓");
+    socketRef.current.emit("log_click", isOpen ? -1 : -2); //["itte", "yye"]
     setIsOpen(!isOpen);
-    setToggleText(isOpen ? "↑" : "↓");
   };
 
   return (
@@ -153,10 +154,7 @@ const ChatRoom = (props) => {
           </div>
         </section>
         <section>
-          {show_predictions && is_listener && suggestions.length > 0 && <label className="label">
-            <button className="chat__show-button"
-              onClick={onClickShowButton}>{toggleText}</button>
-          </label>}
+          {show_predictions && is_listener && suggestions.length > 0 && <button className="chat__show-button" onClick={onClickShowButton}>{toggleText}</button>}
         </section>
         <section className="chat__strategies">
           {show_predictions && is_listener && suggestions.length > 0 && <Collapse isOpened={isOpen}><div className="chat__strategies-container">
