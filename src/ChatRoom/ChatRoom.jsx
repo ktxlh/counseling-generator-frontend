@@ -14,15 +14,13 @@ const ChatRoom = (props) => {
   const show_predictions = listenerType === "listener2"
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-  const [suggestionMessage, setSuggestionMessage] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [suggestion, setSuggestion] = useState("");
   const [predictions, setPredictions] = useState([]);
   const [showDialog, setShowDialog] = React.useState(false);
   const [isOpen, setIsOpen] = useState(true);
   const [toggleText, setToggleText] = useState("↓ Hide example ↓");
+  const [isTypingText, setIsTypingText] = useState("");
   const close = () => setShowDialog(false);
-  const cancelRef = React.useRef();
   const data = {
     "Grounding": "Facilitate or acknowledge.",
     "Open Question": "Pose a question that leaves a latitude for response.",
@@ -34,7 +32,7 @@ const ChatRoom = (props) => {
     "Support" : "Be sympathetic towards the client's circumstances",
   }
   const textbox = document.getElementById("chat__input-textbox");
-  const showButton = document.getElementsByClassName("chat__show-button");
+  const isTypingMark = document.getElementById("chat__is-typing");
   
   // const suggestions = ["nice message", "click this", "howdy"]
   let socketRef = useRef()
@@ -57,6 +55,12 @@ const ChatRoom = (props) => {
       console.log("Dumped logs successfully");
     });
 
+    socketRef.current.on("is_typing", args => {
+      if (is_listener !== args["is_listener"]) {
+        setIsTypingText(args["is_typing"] ? "Member is typing..." : "");
+      }
+    });
+
     return () => {
       messageRef.current.scrollIntoView({behavior: "smooth"})
       socketRef.current.disconnect();
@@ -64,11 +68,15 @@ const ChatRoom = (props) => {
   }, [messages])
 
   const onChangeMessage = e => {
+    if ((message === "") !== (e.target.value === "")) {
+      socketRef.current.emit("is_typing", e.target.value !== "", is_listener);
+    }
     setMessage(e.target.value);
   };
 
   const onSendMessage = (e) => {
     e.preventDefault()
+    socketRef.current.emit("is_typing", false, is_listener);
     if (message !== "") {
       socketRef.current.emit("add_message", is_listener, message);
       setMessage("");
@@ -82,13 +90,9 @@ const ChatRoom = (props) => {
     console.log(x, "messge")
     console.log(predictions.findIndex(i => i === x), "index")
     setMessage(x);
+    socketRef.current.emit("is_typing", true, is_listener);
     socketRef.current.emit("log_click", predictions.findIndex(i => i === x)); //["itte", "yye"]
     textbox.focus();
-  };
-
-  const onSelectSuggestion = x => {
-    setSuggestion(x);
-    setSuggestionMessage(data[x]);
   };
 
   const onDumpLogs = () => {
@@ -97,11 +101,6 @@ const ChatRoom = (props) => {
 
   const onClearSession = () => {
     socketRef.current.emit("clear_session");
-  };
-
-  const toggleModal = () => {
-    setIsOpen(!isOpen);
-    console.log(true);
   };
 
   const onClickShowButton = () => {
@@ -117,8 +116,9 @@ const ChatRoom = (props) => {
           <div className="chat__header-container">
             <div className="chat__header-item">
               <div className="chat__item-group">
-              <div className="user-img-chat">{is_listener ? "M" : "L"}</div>
+                <div className="user-img-chat">{is_listener ? "M" : "L"}</div>
                 {!is_listener ? "Listener" : "Member"}
+                
               </div>
             </div>
             {!is_listener && <div className="chat__header-item">
@@ -150,6 +150,9 @@ const ChatRoom = (props) => {
                   </div>
                   </li>
                 ))}
+                <div className="chat__message-container">
+                    <div id="chat__is-typing">{isTypingText}</div>
+                  </div>
             </ScrollToBottom>
           </div>
         </section>

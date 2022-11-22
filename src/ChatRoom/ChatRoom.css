@@ -120,6 +120,17 @@ section.chat__body-empty {
     display: inline;
 }
 
+#chat__is-typing {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    width: fit-content;
+    font-size: .7rem;
+    color: #7f7f7f;
+    max-width: 100%;
+    display: inline;
+    font-style: italic;
+}
+
 .chat__messages-list img {
     width: 2.5rem;
     height: 2.5rem;
