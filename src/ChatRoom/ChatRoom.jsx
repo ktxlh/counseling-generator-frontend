@@ -32,7 +32,6 @@ const ChatRoom = (props) => {
     "Support" : "Be sympathetic towards the client's circumstances",
   }
   const textbox = document.getElementById("chat__input-textbox");
-  const isTypingMark = document.getElementById("chat__is-typing");
   
   // const suggestions = ["nice message", "click this", "howdy"]
   let socketRef = useRef()
