@@ -120,6 +120,17 @@ section.chat__body-empty {
     display: inline;
 }
 
+#chat__is-typing {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    width: fit-content;
+    font-size: .7rem;
+    color: #7f7f7f;
+    max-width: 100%;
+    display: inline;
+    font-style: italic;
+}
+
 .chat__messages-list img {
     width: 2.5rem;
     height: 2.5rem;
@@ -214,6 +225,25 @@ section.chat__body-empty {
 .chat__suggestion-button.f3 {
     width: 32%;
 }
+/* Show/hide tool */
+.chat__show-button {
+    height: 1.2rem;
+    width: 100%;
+    display: block;
+    border: none;
+    cursor: pointer;
+    color: #aaaaaa;
+    background-color: #fff;
+    font-size: .8rem;
+    transition: 0.3s;
+}
+.chat__show-button:hover {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+.collapse-css-transition {
+    transition: height 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
 /* Chat Input */
 .chat__input {
     height: 4.5rem;
@@ -223,7 +253,7 @@ section.chat__body-empty {
     height: 100%;
 }
 .chat__input-wrapper form {
-    padding: 1rem 1rem;
+    padding: 0.5rem 0rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -291,77 +321,3 @@ section.chat__body-empty {
 .alert_buttons:nth-of-type(2) {
     margin-right: 1rem;
 }
-
-/* .chat-room-container {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    margin: 16px;
-}
-
-.room-name {
-    margin-top: 0;
-    margin-left: auto;
-}
-
-.chat-ID {
-    margin-top: 0;
-    margin-left: auto;
-}
-
-.messages-container {
-    flex: 1;
-    min-height: 100px;
-    overflow: auto;
-    border: 1px solid black;
-    border-radius: 7px 7px 0 0;
-}
-
-.messages-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-.new-message-input-field {
-    height: 50px;
-    max-height: 25%;
-    font-size: 20px;
-    padding: 8px 12px;
-    resize: none;
-}
-
-.message-item {
-    width: 55%;
-    margin: 8px;
-    padding: 12px 8px;
-    word-break: break-word;
-    border-radius: 4px;
-    color: white;
-}
-
-.my-message {
-    background-color: rgb(0, 132, 255);
-    margin-left: auto;
-}
-
-.received-message {
-    background-color: #3f4042;
-    margin-right: auto;
-}
-
-.send-message-button {
-    font-size: 28px;
-    font-weight: 600;
-    color: white;
-    background: #2f00ff;
-    padding: 24px 12px;
-    border: none;
-}
-
-.messages-container, .new-message-input-field, .send-message-button {
-    border-color: #9a9a9a;
-} */

@@ -3,13 +3,7 @@ import ScrollToBottom from 'react-scroll-to-bottom';
 import io from "socket.io-client";
 import "./ChatRoom.css";
 import Modal from "react-modal";
-import {
-  AlertDialog,
-  AlertDialogLabel,
-  AlertDialogDescription,
-  AlertDialogOverlay,
-  AlertDialogContent,
-} from "@reach/alert-dialog";
+import Collapse from 'react-collapse';
 
 Modal.setAppElement("#root");
 
@@ -20,14 +14,13 @@ const ChatRoom = (props) => {
   const show_predictions = listenerType === "listener2"
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-  const [suggestionMessage, setSuggestionMessage] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [suggestion, setSuggestion] = useState("");
   const [predictions, setPredictions] = useState([]);
   const [showDialog, setShowDialog] = React.useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+  const [toggleText, setToggleText] = useState("↓ Hide example ↓");
+  const [isTypingText, setIsTypingText] = useState("");
   const close = () => setShowDialog(false);
-  const cancelRef = React.useRef();
   const data = {
     "Grounding": "Facilitate or acknowledge.",
     "Open Question": "Pose a question that leaves a latitude for response.",
@@ -61,33 +54,28 @@ const ChatRoom = (props) => {
       console.log("Dumped logs successfully");
     });
 
+    socketRef.current.on("is_typing", args => {
+      if (is_listener !== args["is_listener"]) {
+        setIsTypingText(args["is_typing"] ? "Member is typing..." : "");
+      }
+    });
+
     return () => {
       messageRef.current.scrollIntoView({behavior: "smooth"})
       socketRef.current.disconnect();
     };
   }, [messages])
 
-  // const handleNewMessageChange = (event) => {
-  //   setNewMessage(event.target.value);
-  // };
-
-  // const handleSendMessage = () => {
-  //   sendMessage(newMessage);
-  //   setNewMessage("");
-  // };
-
   const onChangeMessage = e => {
+    if ((message === "") !== (e.target.value === "")) {
+      socketRef.current.emit("is_typing", e.target.value !== "", is_listener);
+    }
     setMessage(e.target.value);
   };
 
-  // const open = (text) => {
-  //   setShowDialog(true);
-  //   setSuggestionMessage(data[text]);
-  //   setSuggestion(text);
-  // };
-
   const onSendMessage = (e) => {
     e.preventDefault()
+    socketRef.current.emit("is_typing", false, is_listener);
     if (message !== "") {
       socketRef.current.emit("add_message", is_listener, message);
       setMessage("");
@@ -101,14 +89,9 @@ const ChatRoom = (props) => {
     console.log(x, "messge")
     console.log(predictions.findIndex(i => i === x), "index")
     setMessage(x);
-    socketRef.current.emit("log_click", is_listener, predictions.findIndex(i => i === x)); //["itte", "yye"]
+    socketRef.current.emit("is_typing", true, is_listener);
+    socketRef.current.emit("log_click", predictions.findIndex(i => i === x)); //["itte", "yye"]
     textbox.focus();
-  };
-
-  const onSelectSuggestion = x => {
-    setSuggestion(x);
-    setSuggestionMessage(data[x]);
-    // toggleModal();
   };
 
   const onDumpLogs = () => {
@@ -119,14 +102,11 @@ const ChatRoom = (props) => {
     socketRef.current.emit("clear_session");
   };
 
-  // useEffect(() => {
-  //   messageRef?.current.scrollIntoView({behavior: "smooth"})
-  // }, [messages])
-
-  const toggleModal = () => {
+  const onClickShowButton = () => {
+    setToggleText(isOpen ? "↑ Show example ↑" : "↓ Hide example ↓");
+    socketRef.current.emit("log_click", isOpen ? -1 : -2); //["itte", "yye"]
     setIsOpen(!isOpen);
-    console.log(true);
-  }
+  };
 
   return (
     <>
@@ -135,8 +115,9 @@ const ChatRoom = (props) => {
           <div className="chat__header-container">
             <div className="chat__header-item">
               <div className="chat__item-group">
-              <div className="user-img-chat">{is_listener ? "M" : "L"}</div>
+                <div className="user-img-chat">{is_listener ? "M" : "L"}</div>
                 {!is_listener ? "Listener" : "Member"}
+                
               </div>
             </div>
             {!is_listener && <div className="chat__header-item">
@@ -168,42 +149,31 @@ const ChatRoom = (props) => {
                   </div>
                   </li>
                 ))}
+                <div className="chat__message-container">
+                    <div id="chat__is-typing">{isTypingText}</div>
+                  </div>
             </ScrollToBottom>
           </div>
         </section>
+        <section>
+          {show_predictions && is_listener && suggestions.length > 0 && <button className="chat__show-button" onClick={onClickShowButton}>{toggleText}</button>}
+        </section>
         <section className="chat__strategies">
-          {show_predictions && is_listener && suggestions.length > 0 && <div className="chat__strategies-container">
+          {show_predictions && is_listener && suggestions.length > 0 && <Collapse isOpened={isOpen}><div className="chat__strategies-container">
             <div className="chat__strategies-group">
               {suggestions.map(i => (<button className={`chat__strategies-button f${suggestions.length}`} key = {i}>
                 <span className="chat__strategies-code">{i}</span>
                 <span className="chat__strategies-description">{data[i]}</span>
                 </button>))}
-              {/* {showDialog && (
-                // <AlertDialog className = "alert-buttons" leastDestructiveRef={cancelRef}>
-
-                //   <AlertDialogLabel className = "alert-dialog">{suggestion}: {suggestionMessage}</AlertDialogLabel>
-                //   <button ref={cancelRef} onClick={close} className="alert_button">
-                //       Click to continue
-                //   </button>
-                // </AlertDialog>
-                <Modal
-                  style={{opacity:1}}
-                  isOpen={true}
-                  onRequestClose={toggleModal}
-                  contentLabel="Suggestion Description"
-                >
-                  <div>{suggestion}: {suggestionMessage}</div>
-                </Modal>
-              )} */}
             </div>
-          </div>}
+          </div></Collapse>}
         </section>
         <section className="chat__suggestion">
-          {show_predictions && is_listener && predictions.length > 0 && <div className="chat__suggestion-container">
+          {show_predictions && is_listener && predictions.length > 0 && <Collapse isOpened={isOpen}><div className="chat__suggestion-container">
             <div className="chat__suggestion-group">
               {predictions.map(i => (<button onClick={() => onSelectPred(i)} className={`chat__suggestion-button f${predictions.length}`} key = {i}>{i}</button>))}
             </div>
-          </div>}
+          </div></Collapse>}
         </section>
         <section className="chat__input">
           <div className="chat__input-wrapper">
@@ -212,7 +182,8 @@ const ChatRoom = (props) => {
                 value={message}
                 onChange={onChangeMessage}
                 placeholder="Type your message here..."
-                autocomplete="off" />
+                autocomplete="off" 
+                autofocus />
               <button className="submit__icon">
                 <img src="/send_button.png" alt="send button" />
               </button>
@@ -221,33 +192,6 @@ const ChatRoom = (props) => {
         </section>
       </div>
     </>
-    // <div className="chat-room-container">
-    //   <h1 className="room-name">Room: {roomId}</h1>
-    //   <h1 className="chat-ID">User ID: {userID}</h1>
-    //   <div className="messages-container">
-    //     <ol className="messages-list">
-    // {messages.map((message, i) => (
-    //   <li
-    //     key={i}
-    //     className={`message-item ${
-    //       message.ownedByCurrentUser ? "my-message" : "received-message"
-    //     }`}
-    //   >
-    //     {message.body}
-    //   </li>
-    // ))}
-    //     </ol>
-    //   </div>
-    //   <textarea
-    // value={newMessage}
-    // onChange={handleNewMessageChange}
-    // placeholder="Write message..."
-    //     className="new-message-input-field"
-    //   />
-    //   <button onClick={handleSendMessage} className="send-message-button">
-    //     Send
-    //   </button>
-    // </div>
   );
 };
 
